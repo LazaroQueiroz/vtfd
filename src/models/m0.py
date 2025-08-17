@@ -2,6 +2,7 @@ from random import randint as ri
 from src.models.model import Model
 from src.models.process import Process
 from math import ceil, log
+import os
 
 class M0(Model):
     def __init__(self, physical_memory_size_B, kernel_space_B, address_space):
@@ -20,19 +21,24 @@ class M0(Model):
         return hex(virtual_address + self.base_reg)
 
     def start_loop(self):
+        os.system('clear') 
+        print(f"MODEL 0\n{'-' * 30}\nphy. mem. size (B): {self.physical_memory_size_B}\nkernel space size (B): {self.kernel_space_B}\n{'-' * 30}")
         while True: 
+            print()
+            print("-"*80)
             print("1. get random virtual address")
             print("2. translate virtual address")
             print("3. exit")
             i = int(input())
             if i == 3:
+                os.system('clear') 
                 return
             elif i == 1:
-                print("here's your random virtual address: ", self.generate_random_virtual_address())
+                print("\nhere's your random virtual address: ", self.generate_random_virtual_address())
             elif i == 2: 
                 bit_count_address_space = ceil(log(self.address_space, 2))
                 address = int(input("type your virtual address (in hexadecimal, ex: ca, 1f, fff, 4cafe): "), 16)
-                print(f"here's your base reg: [hex={hex(address)},bin={address:#0{bit_count_address_space + 2}b}]")
+                print(f"\nhere's your virtual address: [hex={hex(address)},bin={address:#0{bit_count_address_space + 2}b}]\n")
                 while True:
                     reveal = input("reveal answer [y/N] ")
                     if reveal in "Yy" and reveal: break
@@ -40,4 +46,4 @@ class M0(Model):
 
                 physical_address_hex = self.translate_virtual_address(address)
                 physical_address_binary = f"{int(physical_address_hex,16):#0{bit_count_address_space + 2}b}"
-                print(f"heres your physical address: [hex={physical_address_hex},bin={physical_address_binary}]")
+                print(f"\nhere's your physical address: [hex={physical_address_hex},bin={physical_address_binary}]")
